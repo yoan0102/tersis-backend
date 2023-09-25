@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
+import jwt from 'jsonwebtoken';
 
 import { User } from './models/user.interface';
+import config from '../../config';
 import { UserModel } from './models/user.schema';
 import { UserDTOLogin, UserDTORegister } from './dto';
-import { generateToken } from '../../utils/generateToken';
+import { generateRefreshToken, generateToken } from '../../utils/generateToken';
 
 export class UserController {
 	private model: Model<User>;
@@ -35,7 +37,14 @@ export class UserController {
 		const token = generateToken({
 			id: user.id,
 		});
-
+		const { refreshToken, expiresIn } = generateRefreshToken({
+			id: user.id,
+		});
+		res.cookie('refreshtoken', refreshToken, {
+			httpOnly: true,
+			secure: !(config.modo === 'developer'),
+			expires: new Date(Date.now() + expiresIn * 1000),
+		});
 		return res.json({ ok: true, user, token });
 	}
 	async register(req: Request, res: Response) {
@@ -51,5 +60,27 @@ export class UserController {
 		if (!user)
 			return res.status(403).json({ error: 'Forbidden not authorization' });
 		res.json({ ok: true, user });
+	}
+
+	async refreshToken(req: Request, res: Response) {
+		const refreshToken = req.cookies.refreshtoken;
+		if (!refreshToken) {
+			const error: ErrorCustom = new Error('Should exists token Bearer');
+			error.status = 400;
+			throw error;
+		}
+		const payload = jwt.verify(refreshToken, config.jwtSecretRefresh);
+		if (!payload) {
+			const error: ErrorCustom = new Error('JWT expire');
+			error.status = 401;
+			throw error;
+		}
+		const token = generateToken(payload);
+		return res.json({ ok: true, token });
+	}
+
+	async logout(req: Request, res: Response) {
+		res.clearCookie('refreshToken');
+		res.json({ ok: true });
 	}
 }

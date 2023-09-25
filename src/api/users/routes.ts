@@ -12,6 +12,9 @@ export class UserRoutes {
 		this.router.post('/login', this.controller.login);
 		this.router.post('/register', this.controller.register);
 		this.router.get('/profile', [isAuthtenticate], this.controller.profile);
+		this.router.get('/refresh', this.controller.refreshToken);
+		this.router.get('/logout', this.controller.logout);
+
 		return this.router;
 	}
 }

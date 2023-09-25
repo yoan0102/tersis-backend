@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
+import cookieParser from 'cookie-parser';
 
 import { UserRoutes } from './api/users';
 import { notFound } from './middlewares/notFound.middleware';
@@ -9,6 +10,7 @@ import { errorHandler } from './middlewares/errorHandler.middleware';
 const app: Application = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
