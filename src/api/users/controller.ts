@@ -18,7 +18,12 @@ export class UserController {
 		const userDto = new UserDTOLogin(req.body);
 		const user = await UserModel.findOne({ email: userDto.email });
 
-		if (!user) return res.status(400).json({ error: 'User not exist' });
+		// if (!user) return res.status(400).json({ error: 'User not exist' });
+		if (!user) {
+			const error: ErrorCustom = new Error('User not Exist');
+			error.status = 400;
+			throw error;
+		}
 
 		const validatePassword = await bcrypt.compare(
 			userDto.password,
