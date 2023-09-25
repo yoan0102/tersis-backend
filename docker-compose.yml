@@ -1,0 +1,13 @@
+version: "3.1"
+
+services:
+  db:
+    image: mongo:5
+    container_name: tesis
+    ports:
+      - 27018:27017
+    restart: always
+    environment:
+      MONGODB_DATABASE: tesis
+    volumes:
+      - ./mongo:/data/db
