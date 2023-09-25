@@ -51,7 +51,20 @@ export class UserController {
 		const userDto = new UserDTORegister(req.body);
 
 		const user = await UserModel.create(userDto);
-		res.json({ ok: true, user });
+		const token = generateToken({
+			id: user.id,
+		});
+		const { refreshToken, expiresIn } = generateRefreshToken({
+			id: user.id,
+		});
+
+		res.cookie('refreshtoken', refreshToken, {
+			httpOnly: true,
+			secure: !(config.modo === 'developer'),
+			expires: new Date(Date.now() + expiresIn * 1000),
+		});
+
+		res.json({ ok: true, user, token });
 	}
 
 	async profile(req: Request, res: Response) {
