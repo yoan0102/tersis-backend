@@ -9,10 +9,24 @@ import { errorHandler } from './middlewares/errorHandler.middleware';
 
 const app: Application = express();
 
+const WHITE_LIST = [process.env.ORIGIN];
+
+app.use(
+	cors({
+		origin: function (origin, cab) {
+			if (WHITE_LIST.includes(origin)) {
+				return cab(null, origin);
+			}
+
+			return cab(
+				new Error('Error de CORS origin: ' + origin + 'not authtorization')
+			);
+		},
+	})
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
 app.use('/api/v1/users', new UserRoutes().getRoutes());
 
