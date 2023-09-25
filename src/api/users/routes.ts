@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { UserController } from './controller';
+import { isAuthtenticate } from '../../middlewares/isAuthtenticate.middleware';
 
 export class UserRoutes {
 	private router: Router = Router();
@@ -10,6 +11,7 @@ export class UserRoutes {
 	getRoutes(): Router {
 		this.router.post('/login', this.controller.login);
 		this.router.post('/register', this.controller.register);
+		this.router.get('/profile', [isAuthtenticate], this.controller.profile);
 		return this.router;
 	}
 }
