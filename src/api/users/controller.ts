@@ -45,7 +45,7 @@ export class UserController {
 			secure: !(config.modo === 'developer'),
 			expires: new Date(Date.now() + expiresIn * 1000),
 		})
-		return res.json({ ok: true, user, token })
+		return res.json({ user, token })
 	}
 	async register(req: Request, res: Response) {
 		const userDto = new UserDTORegister(req.body)

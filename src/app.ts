@@ -4,15 +4,17 @@ import 'express-async-errors'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import helmet from 'helmet'
+import pino from 'pino-http'
 
 import { notFound } from './middlewares/notFound.middleware'
 import { errorHandler } from './middlewares/errorHandler.middleware'
 import { UserRoutes } from './api/users'
 import { TrackRoutes } from './api/tracks'
+import config from './config'
 
 const app: Application = express()
 
-const WHITE_LIST = [process.env.ORIGIN]
+const WHITE_LIST = [config.origin]
 
 app.use(
 	cors({
@@ -27,7 +29,7 @@ app.use(
 		},
 	})
 )
-
+app.use(pino())
 app.use(helmet())
 app.use(compression())
 app.use(express.json())

@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'
+dotenv.config()
 
 export default {
 	port: process.env.PORT,
@@ -7,4 +7,5 @@ export default {
 	jwtSecret: process.env.JWT_SECRET || 'secret',
 	jwtSecretRefresh: process.env.JWT_SECRET_REFRESH || 'secretrefresh',
 	modo: process.env.MODO || 'developer',
-};
+	origin: process.env.ORIGIN,
+}
