@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 
 export const errorHandler = (
 	err: ErrorCustom,
@@ -6,7 +6,6 @@ export const errorHandler = (
 	resp: Response,
 	next: NextFunction
 ) => {
-	const httpStatus = err.status || 500;
-
-	resp.status(httpStatus).json({ error: err.message || 'Internal Error' });
-};
+	const httpStatus = err.status || 500
+	resp.status(httpStatus).json({ error: err.message || 'Internal Error' })
+}

@@ -1,3 +1,4 @@
+import {ObjectId} from 'mongoose'
 export interface Track {
 	name: string
 	album: Album
@@ -8,7 +9,7 @@ export interface Track {
 	published: boolean
 	release_date: Date
 	gender: Gender
-	user_id: string
+	user_id: ObjectId
 	artist: Artist
 	duration: Duration
 }
@@ -16,7 +17,6 @@ export interface Track {
 export interface Album {
 	id: string
 	name: string
-	tracks: Array<string>
 }
 
 export interface Gender {
