@@ -14,26 +14,30 @@ import config from './config'
 
 const app: Application = express()
 
-const WHITE_LIST = [config.origin]
+const WHITE_LIST = [config.origin, '*']
 
-app.use(
-	cors({
-		origin: function (origin, cab) {
-			if (WHITE_LIST.includes(origin)) {
-				return cab(null, origin)
-			}
+// app.use(
+// 	cors({
+// 		origin: function (origin, cab) {
+// 			if (WHITE_LIST.includes(origin)) {
+// 				return cab(null, origin)
+// 			}
 
-			return cab(
-				new Error('Error de CORS origin: ' + origin + 'not authtorization')
-			)
-		},
-	})
-)
-app.use(pino())
+// 			return cab(
+// 				new Error('Error de CORS origin: ' + origin + 'not authtorization')
+// 			)
+// 		},
+// 		credentials: true,
+// 	})
+// )
+
+app.use(cors())
+
+// app.use(pino())
+app.use(cookieParser())
 app.use(helmet())
 app.use(compression())
 app.use(express.json())
-app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/v1/users', new UserRoutes().getRoutes())
