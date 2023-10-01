@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+import express, { Application, Response } from 'express'
 import cors from 'cors'
 import 'express-async-errors'
 import cookieParser from 'cookie-parser'
@@ -31,17 +31,20 @@ const WHITE_LIST = [config.origin, '*']
 // 	})
 // )
 
-app.use(cors())
+// app.use(cors())
 
 // app.use(pino())
 app.use(cookieParser())
-app.use(helmet())
-app.use(compression())
+// app.use(helmet())
+// app.use(compression())
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.get('/cookie', (req, res: Response) => {
+	console.log('Llego la peticion')
+	res.cookie('12', '12').send('cookie')
+})
 
-app.use('/api/v1/users', new UserRoutes().getRoutes())
 app.use('/api/v1/tracks', new TrackRoutes().getRoutes())
+app.use('/api/v1/users', new UserRoutes().getRoutes())
 
 app.use(notFound)
 app.use(errorHandler)

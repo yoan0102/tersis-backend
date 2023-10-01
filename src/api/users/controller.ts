@@ -40,10 +40,9 @@ export class UserController {
 		const { refreshToken, expiresIn } = generateRefreshToken({
 			id: user.id,
 		})
-
-		res.cookie('refreshtoken', refreshToken, {
+		res.cookie('token', refreshToken, {
 			httpOnly: true,
-			secure: !(config.modo === 'developer'),
+			// secure: !(config.modo === 'developer'),
 			expires: new Date(Date.now() + expiresIn * 1000),
 		})
 		return res.json({ user, token })

@@ -10,7 +10,7 @@ export class TrackRoutes {
 		this.router
 			.use(upload.single('track'))
 			.route('/')
-			.post(this.controller.create)
+			.post(this.controller.createItem)
 
 		return this.router
 	}
