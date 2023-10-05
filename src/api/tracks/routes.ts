@@ -8,9 +8,13 @@ export class TrackRoutes {
 
 	getRoutes(): Router {
 		this.router
-			.use(upload.single('track'))
-			.route('/')
-			.post(this.controller.createItem)
+			.use(
+				upload.fields([
+					{ name: 'track', maxCount: 1 },
+					{ name: 'cover', maxCount: 1 },
+				])
+			)
+			.post('/', this.controller.createItem)
 
 		return this.router
 	}

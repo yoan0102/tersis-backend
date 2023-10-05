@@ -1,9 +1,9 @@
 import { Request, response, Response } from 'express'
 import { Model } from 'mongoose'
-import { responseJson } from '../../utils'
+import { responseJson, saveTrack } from '../../utils'
 import { Track } from './models/track.interface'
-import { saveImage } from '../../utils/saveImage'
 import { TrackModel } from './models/track.schema'
+import { File } from './interfaces/files.interface'
 
 export class TrackController {
 	private model: Model<Track>
@@ -24,8 +24,16 @@ export class TrackController {
 	}
 
 	async createItem(req: Request, res: Response) {
-		console.log(req.file)
-		const newPath = saveImage(req.file)
+		const files = req.files as { [fieldname: string]: File[] }
+		if (!req.files) {
+			const error: ErrorCustom = new Error('Track is required')
+			error.status = 400
+			throw error
+		}
+
+		const newPathTrack = saveTrack(files['track'][0])
+		console.log(newPathTrack)
+
 		res.send('Crack')
 	}
 

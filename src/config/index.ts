@@ -8,4 +8,5 @@ export default {
 	jwtSecretRefresh: process.env.JWT_SECRET_REFRESH || 'secretrefresh',
 	modo: process.env.MODO || 'developer',
 	origin: process.env.ORIGIN,
+	publicUrl: process.env.PUBLIC_URL,
 }

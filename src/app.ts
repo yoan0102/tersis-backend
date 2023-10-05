@@ -1,4 +1,5 @@
 import express, { Application, Response } from 'express'
+console.log('dirname', __dirname)
 import cors from 'cors'
 import 'express-async-errors'
 import cookieParser from 'cookie-parser'
@@ -35,9 +36,10 @@ const WHITE_LIST = [config.origin, '*']
 
 // app.use(pino())
 app.use(cookieParser())
-// app.use(helmet())
-// app.use(compression())
+app.use(helmet())
+app.use(compression())
 app.use(express.json())
+app.use(express.static(__dirname + 'uploads'))
 app.get('/cookie', (req, res: Response) => {
 	console.log('Llego la peticion')
 	res.cookie('12', '12').send('cookie')
