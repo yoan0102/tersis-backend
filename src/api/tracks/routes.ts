@@ -15,6 +15,7 @@ export class TrackRoutes {
 				])
 			)
 			.post('/', this.controller.createItem)
+		this.router.get('/', this.controller.getItems)
 
 		return this.router
 	}

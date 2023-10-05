@@ -7,5 +7,6 @@ export const errorHandler = (
 	next: NextFunction
 ) => {
 	const httpStatus = err.status || 500
+	console.log(err)
 	resp.status(httpStatus).json({ error: err.message || 'Internal Error' })
 }

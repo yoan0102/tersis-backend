@@ -1,12 +1,12 @@
-import {ObjectId} from 'mongoose'
+import { ObjectId } from 'mongoose'
 export interface Track {
 	name: string
 	album: Album
 	cover: string
 	url: string
-	rating: number
+	rating?: number
 	artitCNames: Array<string>
-	published: boolean
+	published?: boolean
 	release_date: Date
 	gender: Gender
 	user_id: ObjectId
@@ -15,12 +15,12 @@ export interface Track {
 }
 
 export interface Album {
-	id: string
+	id?: string
 	name: string
 }
 
 export interface Gender {
-	id: string
+	id?: string
 	name: string
 }
 
