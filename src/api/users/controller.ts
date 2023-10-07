@@ -10,12 +10,6 @@ import { UserDTOLogin, UserDTORegister } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
 
 export class UserController {
-	private model: Model<User>
-
-	constructor() {
-		this.model = UserModel
-	}
-
 	async login(req: Request, res: Response) {
 		const userDto = new UserDTOLogin(req.body)
 		const user = await UserModel.findOne({ email: userDto.email })
@@ -40,7 +34,7 @@ export class UserController {
 		const { refreshToken, expiresIn } = generateRefreshToken({
 			id: user.id,
 		})
-		res.cookie('token', refreshToken, {
+		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			// secure: !(config.modo === 'developer'),
 			expires: new Date(Date.now() + expiresIn * 1000),
@@ -58,7 +52,7 @@ export class UserController {
 			id: user.id,
 		})
 
-		res.cookie('refreshtoken', refreshToken, {
+		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			secure: !(config.modo === 'developer'),
 			expires: new Date(Date.now() + expiresIn * 1000),
@@ -76,7 +70,8 @@ export class UserController {
 	}
 
 	async refreshToken(req: Request, res: Response) {
-		const refreshToken = req.cookies.refreshtoken
+		const refreshToken = req.cookies.refreshToken
+
 		if (!refreshToken) {
 			const error: ErrorCustom = new Error('Should exists token Bearer')
 			error.status = 400
@@ -88,6 +83,7 @@ export class UserController {
 			error.status = 401
 			throw error
 		}
+
 		const token = generateToken(payload)
 		return res.json({ ok: true, token })
 	}
