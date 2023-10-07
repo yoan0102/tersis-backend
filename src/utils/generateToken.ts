@@ -1,9 +1,10 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from '../config'
 
-export const generateToken = (payload: { id: string }) => {
+export const generateToken = (payload: JwtPayload | string) => {
 	const expiresIn: number = 60 * 60 * 24
-	const token = jwt.sign({ id: payload.id }, config.jwtSecret, {
+	const id = (payload as JwtPayload).id
+	const token = jwt.sign({ id }, config.jwtSecret, {
 		expiresIn,
 	})
 
