@@ -4,7 +4,6 @@ import 'express-async-errors'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import helmet from 'helmet'
-import pino from 'pino-http'
 
 import { notFound } from './middlewares/notFound.middleware'
 import { errorHandler } from './middlewares/errorHandler.middleware'
@@ -17,26 +16,25 @@ const app: Application = express()
 const WHITE_LIST = [config.origin]
 
 app.use(
-	cors({
-		origin: function (origin, cab) {
-			if (WHITE_LIST.includes(origin)) {
-				return cab(null, origin)
-			}
-
-			return cab(
-				new Error('Error de CORS origin: ' + origin + 'not authtorization')
-			)
-		},
-		credentials: true,
-	})
+	cors()
+	// cors({
+	// 	origin: function (origin, cab) {
+	// 		if (WHITE_LIST.includes(origin)) {
+	// 			return cab(null, origin)
+	// 		}
+	// 		return cab(
+	// 			new Error('Error de CORS origin: ' + origin + 'not authtorization')
+	// 		)
+	// 	},
+	// 	credentials: true,
+	// })
 )
 
+app.use('/uploads', express.static('uploads'))
 app.use(cookieParser())
-app.use(helmet())
 app.use(compression())
 app.use(express.json())
-app.use('/uploads', express.static('uploads'))
-
+app.use(helmet())
 app.use('/api/v1/tracks', new TrackRoutes().getRoutes())
 app.use('/api/v1/users', new UserRoutes().getRoutes())
 

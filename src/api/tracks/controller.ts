@@ -1,7 +1,5 @@
 import { Request, response, Response } from 'express'
-import { Model } from 'mongoose'
 import { responseJson, saveImage, saveTrack } from '../../utils'
-import { Album, Track } from './models/track.interface'
 import { TrackModel } from './models/track.schema'
 import { File } from './interfaces/files.interface'
 import { TrackDTOCreate } from './dto'
@@ -32,6 +30,8 @@ export class TrackController {
 		}
 		const newPathTrack = saveTrack(files['track'][0])
 		const newPathCover = saveImage(files['cover'][0])
+		console.log(newPathTrack)
+		console.log(newPathCover)
 
 		const track = new TrackDTOCreate({
 			name: req.body.name,
@@ -52,7 +52,7 @@ export class TrackController {
 			cover: newPathCover,
 			url: newPathTrack,
 		})
-		// console.log('Track', track)
+
 		const trackCreated = await TrackModel.create(track)
 
 		return res.status(201).json({
