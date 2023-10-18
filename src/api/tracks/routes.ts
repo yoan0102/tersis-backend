@@ -15,6 +15,14 @@ export class TrackRoutes {
 				])
 			)
 			.post('/', this.controller.createItem)
+		this.router
+			.use(
+				upload.fields([
+					{ name: 'track', maxCount: 1 },
+					{ name: 'cover', maxCount: 1 },
+				])
+			)
+			.post('/', this.controller.updateItems)
 		this.router.get('/', this.controller.getItems)
 		this.router.get('/:id', this.controller.getItem)
 		this.router.delete('/:id', this.controller.deleteItems)

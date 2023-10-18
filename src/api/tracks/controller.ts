@@ -56,10 +56,10 @@ export class TrackController {
 			error.status = 400
 			throw error
 		} else {
-			track.cover = newPathTrack
+			track.url = newPathTrack
 		}
 
-		if (files['cover'][0] === undefined) {
+		if (!files['cover']) {
 			track.cover = ''
 		} else {
 			const newPathCover = saveImage(files['cover'][0])
@@ -84,28 +84,28 @@ export class TrackController {
 		const newPathTrack = saveTrack(files['track'][0])
 		const newPathCover = saveImage(files['cover'][0])
 
-		const track = new TrackDTOCreate({
-			name: req.body.name,
-			album: { name: req.body.album },
-			artist: {
-				name: req.body.artistName,
-				nationality: req.body.nationality,
-				nickname: req.body.nickname,
-			},
-			artitCNames: req.body.artistCName.split(','),
-			duration: {
-				start: Number(req.body.durationStart),
-				end: Number(req.body.durationEnd),
-			},
-			gender: { name: req.body.gender },
-			release_date: new Date(req.body.release_date),
-			user_id: req.body.userId,
-			cover: newPathCover,
-			url: newPathTrack,
-		})
-		const data = await TrackModel.findByIdAndUpdate(req.params.id, req.body, {
-			new: true,
-		})
+		// const track = new TrackDTOCreate({
+		// 	name: req.body.name,
+		// 	album: { name: req.body.album },
+		// 	artist: {
+		// 		name: req.body.artistName,
+		// 		nationality: req.body.nationality,
+		// 		nickname: req.body.nickname,
+		// 	},
+		// 	artitCNames: req.body.artistCName.split(','),
+		// 	duration: {
+		// 		start: Number(req.body.durationStart),
+		// 		end: Number(req.body.durationEnd),
+		// 	},
+		// 	gender: { name: req.body.gender },
+		// 	release_date: new Date(req.body.release_date),
+		// 	user_id: req.body.userId,
+		// 	cover: newPathCover,
+		// 	url: newPathTrack,
+		// })
+		// const data = await TrackModel.findByIdAndUpdate(req.params.id, req.body, {
+		// 	new: true,
+		// })
 	}
 
 	async deleteItems(req: Request, res: Response) {
