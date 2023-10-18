@@ -8,8 +8,20 @@ import config from '../../config'
 import { UserModel } from './models/user.schema'
 import { UserDTOLogin, UserDTORegister } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
+import {
+	UpdateUserBodyType,
+	UpdateUserParamsType,
+} from './models/user.validatorSchema'
 
 export class UserController {
+	async getAll(req: Request, res: Response) {
+		const users = await UserModel.find({})
+		return res.json({
+			ok: true,
+			error: false,
+			data: users,
+		})
+	}
 	async login(req: Request, res: Response) {
 		const userDto = new UserDTOLogin(req.body)
 		const user = await UserModel.findOne({ email: userDto.email })
@@ -86,6 +98,27 @@ export class UserController {
 
 		const token = generateToken(payload)
 		return res.json({ ok: true, token })
+	}
+
+	async favoriteUpdate(req: Request, res: Response) {
+		const id = req.params.id
+		const userDb = await UserModel.findById(id)
+		if (!userDb) {
+			const error: ErrorCustom = new Error('User not found')
+			error.status = 404
+			throw error
+		}
+		const user = await UserModel.findByIdAndUpdate(
+			id,
+			{ favorites: [...userDb.favorites, req.body.favorites] },
+			{ new: true }
+		)
+
+		return res.json({
+			ok: true,
+			data: user,
+			error: false,
+		})
 	}
 
 	async logout(req: Request, res: Response) {

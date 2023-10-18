@@ -28,10 +28,6 @@ export class TrackController {
 			error.status = 400
 			throw error
 		}
-		const newPathTrack = saveTrack(files['track'][0])
-		const newPathCover = saveImage(files['cover'][0])
-		console.log(newPathTrack)
-		console.log(newPathCover)
 
 		const track = new TrackDTOCreate({
 			name: req.body.name,
@@ -49,9 +45,26 @@ export class TrackController {
 			gender: { name: req.body.gender },
 			release_date: new Date(req.body.release_date),
 			user_id: req.body.userId,
-			cover: newPathCover,
-			url: newPathTrack,
+			cover: '',
+			url: '',
 		})
+
+		const newPathTrack = saveTrack(files['track'][0])
+
+		if (!newPathTrack) {
+			const error: ErrorCustom = new Error('Track is required')
+			error.status = 400
+			throw error
+		} else {
+			track.cover = newPathTrack
+		}
+
+		if (files['cover'][0] === undefined) {
+			track.cover = ''
+		} else {
+			const newPathCover = saveImage(files['cover'][0])
+			track.cover = newPathCover
+		}
 
 		const trackCreated = await TrackModel.create(track)
 
