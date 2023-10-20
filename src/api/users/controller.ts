@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import config from '../../config'
 import { UserModel } from './models/user.schema'
-import { UserDTOLogin, UserDTORegister } from './dto'
+import { UserDTOLogin, UserDTORegister, UserDTOUpdate } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
 
 export class UserController {
@@ -119,6 +119,29 @@ export class UserController {
 			{ favorites: [...userDb.favorites, req.body.favorites] },
 			{ new: true }
 		)
+
+		return res.json({
+			ok: true,
+			data: {
+				user,
+			},
+			error: false,
+		})
+	}
+
+	async update(req: Request, res: Response) {
+		const id = req.params.id
+		const userDb = await UserModel.findById(id)
+
+		if (!userDb) {
+			const error: ErrorCustom = new Error('User not found')
+			error.status = 404
+			throw error
+		}
+
+		const userDto = new UserDTOUpdate(req.body)
+
+		const user = await UserModel.findByIdAndUpdate(id, userDto, { new: true })
 
 		return res.json({
 			ok: true,

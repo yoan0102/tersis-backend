@@ -19,7 +19,7 @@ export class UserRoutes {
 		)
 		this.router.get('/', this.controller.getAll)
 		this.router.get('/:id', this.controller.profile)
-		this.router.patch('/:id', this.controller.profile)
+		this.router.patch('/:id', this.controller.update)
 		this.router.patch('/favorites/:id', this.controller.favoriteUpdate)
 		this.router.get('/refresh', this.controller.refreshToken)
 
