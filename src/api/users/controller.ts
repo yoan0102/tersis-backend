@@ -1,17 +1,11 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
-import { Model } from 'mongoose'
 import jwt from 'jsonwebtoken'
 
-import { User } from './models/user.interface'
 import config from '../../config'
 import { UserModel } from './models/user.schema'
 import { UserDTOLogin, UserDTORegister } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
-import {
-	UpdateUserBodyType,
-	UpdateUserParamsType,
-} from './models/user.validatorSchema'
 
 export class UserController {
 	async getAll(req: Request, res: Response) {
@@ -43,15 +37,19 @@ export class UserController {
 		const token = generateToken({
 			id: user.id,
 		})
-		const { refreshToken, expiresIn } = generateRefreshToken({
+		const refreshToken = generateRefreshToken({
 			id: user.id,
 		})
-		res.cookie('refreshToken', refreshToken, {
-			httpOnly: true,
-			// secure: !(config.modo === 'developer'),
-			expires: new Date(Date.now() + expiresIn * 1000),
+
+		return res.json({
+			ok: true,
+			error: false,
+			data: {
+				user,
+				token,
+				refreshToken,
+			},
 		})
-		return res.json({ user, token })
 	}
 	async register(req: Request, res: Response) {
 		const userDto = new UserDTORegister(req.body)
@@ -60,17 +58,15 @@ export class UserController {
 		const token = generateToken({
 			id: user.id,
 		})
-		const { refreshToken, expiresIn } = generateRefreshToken({
+		const refresToken = generateRefreshToken({
 			id: user.id,
 		})
 
-		res.cookie('refreshToken', refreshToken, {
-			httpOnly: true,
-			secure: !(config.modo === 'developer'),
-			expires: new Date(Date.now() + expiresIn * 1000),
+		res.json({
+			ok: true,
+			error: false,
+			data: { user, token, refresToken },
 		})
-
-		res.json({ ok: true, user, token })
 	}
 
 	async profile(req: Request, res: Response) {
@@ -78,7 +74,12 @@ export class UserController {
 		const user = await UserModel.findById(id).lean()
 		if (!user)
 			return res.status(403).json({ error: 'Forbidden not authorization' })
-		res.json({ ok: true, user })
+		res.json({
+			ok: true,
+			data: {
+				user,
+			},
+		})
 	}
 
 	async refreshToken(req: Request, res: Response) {
@@ -97,7 +98,12 @@ export class UserController {
 		}
 
 		const token = generateToken(payload)
-		return res.json({ ok: true, token })
+		return res.json({
+			ok: true,
+			data: {
+				token,
+			},
+		})
 	}
 
 	async favoriteUpdate(req: Request, res: Response) {
@@ -116,13 +122,10 @@ export class UserController {
 
 		return res.json({
 			ok: true,
-			data: user,
+			data: {
+				user,
+			},
 			error: false,
 		})
-	}
-
-	async logout(req: Request, res: Response) {
-		res.clearCookie('refreshToken')
-		res.json({ ok: true })
 	}
 }

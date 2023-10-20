@@ -21,7 +21,6 @@ export class UserRoutes {
 		this.router.get('/all', this.controller.getAll)
 		this.router.get('/profile', [isAuthtenticate], this.controller.profile)
 		this.router.get('/refresh', this.controller.refreshToken)
-		this.router.get('/logout', this.controller.logout)
 
 		return this.router
 	}
