@@ -70,7 +70,7 @@ export class UserController {
 	}
 
 	async profile(req: Request, res: Response) {
-		const { id } = req.user
+		const { id } = req.params
 		const user = await UserModel.findById(id).lean()
 		if (!user)
 			return res.status(403).json({ error: 'Forbidden not authorization' })

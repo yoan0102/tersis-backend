@@ -19,7 +19,7 @@ export class UserRoutes {
 		)
 		this.router.patch('/favorites/:id', this.controller.favoriteUpdate)
 		this.router.get('/all', this.controller.getAll)
-		this.router.get('/profile', [isAuthtenticate], this.controller.profile)
+		this.router.get('/profile/:id', this.controller.profile)
 		this.router.get('/refresh', this.controller.refreshToken)
 
 		return this.router
