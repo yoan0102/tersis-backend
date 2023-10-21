@@ -133,4 +133,35 @@ export class TrackController {
 		}
 		return res.sendStatus(204).send('Track Deleted')
 	}
+
+	async publishItems(req: Request, res: Response) {
+		const id = req.params.id
+
+		const trackDb = await TrackModel.findById(id)
+
+		if (!trackDb) {
+			const error: ErrorCustom = new Error('Track not found')
+			error.status = 404
+			throw error
+		}
+
+		const track = await TrackModel.findByIdAndUpdate(
+			id,
+			{ published: true },
+			{ new: true }
+		)
+		if (!track) {
+			const error: ErrorCustom = new Error('Track not published')
+			error.status = 404
+			throw error
+		}
+
+		return res.json({
+			ok: true,
+			data: {
+				track,
+			},
+			error: false,
+		})
+	}
 }
