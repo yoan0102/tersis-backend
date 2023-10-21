@@ -134,7 +134,7 @@ export class TrackController {
 		return res.sendStatus(204).send('Track Deleted')
 	}
 
-	async publishItems(req: Request, res: Response) {
+	async publishItem(req: Request, res: Response) {
 		const id = req.params.id
 
 		const trackDb = await TrackModel.findById(id)

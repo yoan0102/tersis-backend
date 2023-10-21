@@ -25,7 +25,9 @@ export class TrackRoutes {
 			.post('/', this.controller.updateItems)
 		this.router.get('/', this.controller.getItems)
 		this.router.get('/:id', this.controller.getItem)
+		this.router.patch('/:id', this.controller.updateItems)
 		this.router.delete('/:id', this.controller.deleteItems)
+		this.router.patch('/published/:id', this.controller.publishItem)
 
 		return this.router
 	}
