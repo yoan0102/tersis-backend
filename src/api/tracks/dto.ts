@@ -52,25 +52,40 @@ export class TrackDTOCreate {
 		this.url = url
 		this.user_id = user_id
 	}
-
-	// public async validate(body: Track) {
-	// 	try {
-	// 		await this.body.parse(body)
-	// 		return true
-	// 	} catch (err) {
-	// 		const error: ErrorCustom = new Error(err)
-	// 		error.status = 400
-	// 		throw error
-	// 	}
-	// }
 }
 
-// export class UserDTOLogin {
-// 	email: string
-// 	password: string
-
-// 	constructor({ email, password }: { email: string; password: string }) {
-// 		this.email = email
-// 		this.password = password
-// 	}
-// }
+export class TrackDTOUpdate {
+	public name?: string
+	public album?: Album
+	public artist?: Artist
+	public artitCNames?: string[]
+	public cover?: string
+	public duration?: Duration
+	public gender?: Gender
+	public release_date?: Date
+	public url?: string
+	public user_id?: ObjectId
+	constructor({
+		name,
+		album,
+		artist,
+		artitCNames,
+		cover,
+		duration,
+		gender,
+		release_date,
+		url,
+		user_id,
+	}: Track) {
+		this.name = name
+		this.album = album
+		this.artist = artist
+		this.artitCNames = artitCNames
+		this.cover = cover
+		this.duration = duration
+		this.gender = gender
+		this.release_date = release_date
+		this.url = url
+		this.user_id = user_id
+	}
+}
