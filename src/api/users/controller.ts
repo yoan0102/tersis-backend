@@ -151,4 +151,21 @@ export class UserController {
 			error: false,
 		})
 	}
+
+	async destroy(req: Request, res: Response) {
+		const id = req.params.id
+		const userDb = await UserModel.findById(id)
+		if (!userDb) {
+			const error: ErrorCustom = new Error('User not found')
+			error.status = 404
+			throw error
+		}
+
+		await UserModel.findByIdAndDelete(id)
+		return res.status(204).json({
+			ok: true,
+			data: {},
+			error: false,
+		})
+	}
 }

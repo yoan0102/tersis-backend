@@ -1,13 +1,13 @@
-import { Request } from 'express';
+import { Request } from 'express'
 
 declare global {
 	namespace Express {
 		export interface Request extends Request {
-			user: JwtPayload;
+			user: JwtPayload
 		}
 	}
 	export interface ErrorCustom extends Error {
-		status?: number;
-		message: string;
+		status?: number
+		message: string
 	}
 }

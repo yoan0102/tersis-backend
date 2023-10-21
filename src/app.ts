@@ -23,6 +23,7 @@ app.use('/uploads', express.static('uploads'))
 app.use(compression())
 app.use(express.json())
 app.use(helmet())
+
 app.use('/api/v1/tracks', new TrackRoutes().getRoutes())
 app.use('/api/v1/users', new UserRoutes().getRoutes())
 

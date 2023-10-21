@@ -17,6 +17,6 @@
 		"skipLibCheck": true
 	},
 	"exclude": ["node_modules"],
-	"include": ["src/**/*", "test/**/*"],
+	"include": ["src/**/*", "test/**/*", "__test__"],
 	"files": ["./src/@types/global.d.ts"]
 }
