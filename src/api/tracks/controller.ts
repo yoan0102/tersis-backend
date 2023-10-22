@@ -12,7 +12,7 @@ export class TrackController {
 
 	async getItem(req: Request, res: Response) {
 		const id = req.params.id
-		const track = await TrackModel.findById(id).where({ published: true })
+		const track = await TrackModel.findById(id)
 		if (!track) {
 			const error: ErrorCustom = new Error('Track not Found')
 			error.status = 404
@@ -75,12 +75,8 @@ export class TrackController {
 
 	async updateItems(req: Request, res: Response) {
 		const id = req.params.id
+
 		const files = req.files as { [fieldname: string]: File[] }
-		if (!req.files) {
-			const error: ErrorCustom = new Error('Track and Cover  is required')
-			error.status = 400
-			throw error
-		}
 
 		const trackDb = await TrackModel.findById(id)
 
@@ -90,37 +86,25 @@ export class TrackController {
 			throw error
 		}
 
-		const track = new TrackDTOUpdate({
-			name: trackDb.name,
-			album: { name: trackDb.album.name },
-			artist: {
-				name: trackDb.artist.name,
-				nationality: trackDb.artist.nationality,
-				nickname: trackDb.artist.nickname,
-			},
-			artitCNames: trackDb.artitCNames,
-			duration: {
-				start: trackDb.duration.start,
-				end: Number(trackDb.duration.end),
-			},
-			gender: { name: trackDb.gender.name },
-			release_date: new Date(trackDb.release_date),
-			user_id: trackDb.user_id,
-			cover: trackDb.cover,
-			url: trackDb.url,
+		const trackDto = new TrackDTOUpdate(req.body)
+
+		if (files) {
+			const newPathTrack = saveTrack(files['track'][0])
+			trackDto.url = newPathTrack
+			const newPathCover = saveImage(files['cover'][0])
+			trackDto.cover = newPathCover
+		}
+
+		const track = await TrackModel.findByIdAndUpdate(req.params.id, trackDto, {
+			new: true,
 		})
 
-		if (files['track']) {
-			const newPathTrack = saveTrack(files['track'][0])
-			track.url = newPathTrack
-		}
-		if (files['cover']) {
-			const newPathCover = saveImage(files['cover'][0])
-			track.cover = newPathCover
-		}
-
-		const data = await TrackModel.findByIdAndUpdate(req.params.id, req.body, {
-			new: true,
+		return res.json({
+			ok: true,
+			data: {
+				track,
+			},
+			error: false,
 		})
 	}
 
