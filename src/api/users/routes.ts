@@ -24,6 +24,12 @@ export class UserRoutes {
 
 		this.router.get('/refresh', this.controller.refreshToken)
 
+		this.router.get(
+			'/favorites/:id',
+			[isAuthtenticate],
+			this.controller.favorites
+		)
+
 		return this.router
 	}
 }

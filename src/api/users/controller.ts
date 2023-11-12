@@ -6,6 +6,7 @@ import config from '../../config'
 import { UserModel } from './models/user.schema'
 import { UserDTOLogin, UserDTORegister, UserDTOUpdate } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
+import { TrackModel } from '../tracks/models/track.schema'
 
 export class UserController {
 	async getAll(req: Request, res: Response) {
@@ -108,15 +109,28 @@ export class UserController {
 
 	async favoriteUpdate(req: Request, res: Response) {
 		const id = req.params.id
+		const idFavorite: any = req.body.favorite
 		const userDb = await UserModel.findById(id)
 		if (!userDb) {
 			const error: ErrorCustom = new Error('User not found')
 			error.status = 404
 			throw error
 		}
+		const existFavorite = userDb.favorites.includes(idFavorite as never)
+
+		if (existFavorite) {
+			return res.json({
+				ok: true,
+				data: {
+					userDb,
+				},
+				error: false,
+			})
+		}
+
 		const user = await UserModel.findByIdAndUpdate(
 			id,
-			{ favorites: [...userDb.favorites, req.body.favorites] },
+			{ favorites: [...userDb.favorites, idFavorite] },
 			{ new: true }
 		)
 
@@ -124,6 +138,29 @@ export class UserController {
 			ok: true,
 			data: {
 				user,
+			},
+			error: false,
+		})
+	}
+	async favorites(req: Request, res: Response) {
+		const id = req.params.id
+		const userDb = await UserModel.findById(id)
+		if (!userDb) {
+			const error: ErrorCustom = new Error('User not found')
+			error.status = 404
+			throw error
+		}
+		const tracks = await TrackModel.find({})
+
+		const favorites = userDb.favorites.map((x) =>
+			tracks.filter((item) => item.id == x)
+		)
+
+		return res.json({
+			ok: true,
+			data: {
+				favorites,
+				count: favorites.length,
 			},
 			error: false,
 		})
