@@ -7,6 +7,7 @@ import { UserModel } from './models/user.schema'
 import { UserDTOLogin, UserDTORegister, UserDTOUpdate } from './dto'
 import { generateRefreshToken, generateToken } from '../../utils/generateToken'
 import { TrackModel } from '../tracks/models/track.schema'
+import { ObjectId } from 'mongodb'
 
 export class UserController {
 	async getAll(req: Request, res: Response) {
@@ -161,6 +162,35 @@ export class UserController {
 			data: {
 				favorites,
 				count: favorites.length,
+			},
+			error: false,
+		})
+	}
+
+	async removeFavorite(req: Request, res: Response) {
+		const id = req.params.id
+		const favoriteId = req.body.favoriteId
+
+		const userDb = await UserModel.findById(id)
+
+		if (!userDb) {
+			const error: ErrorCustom = new Error('User not found')
+			error.status = 404
+			throw error
+		}
+
+		const favorites = userDb.favorites.filter((x) => String(x) !== favoriteId)
+		console.log(favorites)
+		const user = await UserModel.findByIdAndUpdate(
+			id,
+			{ favorites },
+			{ new: true }
+		)
+
+		return res.json({
+			ok: true,
+			data: {
+				user,
 			},
 			error: false,
 		})

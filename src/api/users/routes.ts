@@ -21,7 +21,11 @@ export class UserRoutes {
 			[isAuthtenticate],
 			this.controller.favoriteUpdate
 		)
-
+		this.router.patch(
+			'/favorites/remove/:id',
+			[isAuthtenticate],
+			this.controller.removeFavorite
+		)
 		this.router.get('/refresh', this.controller.refreshToken)
 
 		this.router.get(
