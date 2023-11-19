@@ -8,6 +8,7 @@ export const isAdmin = async (
 ) => {
 	const id = req.user.id
 	const user = await UserModel.findById(id)
+	console.log({ user })
 	if (!user) {
 		const error: ErrorCustom = new Error('User not found')
 		error.status = 404
