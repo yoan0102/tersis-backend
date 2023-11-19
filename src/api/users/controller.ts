@@ -180,7 +180,6 @@ export class UserController {
 		}
 
 		const favorites = userDb.favorites.filter((x) => String(x) !== favoriteId)
-		console.log({ favorites })
 		const user = await UserModel.findByIdAndUpdate(
 			id,
 			{ favorites },
