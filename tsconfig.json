@@ -1,22 +1,22 @@
 {
 	"compilerOptions": {
 		/* Language and Environment */
-		"target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+		"target": "ES6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
 
 		/* Modules */
-		"module": "CommonJS",
+		"module": "commonjs",
 		"rootDir": "./src",
 		"moduleResolution": "Node",
 		"baseUrl": ".",
 		"sourceMap": true,
-		"outDir": "./dist",
+		"outDir": "dist",
 		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
+		// "forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"noImplicitAny": true,
 		"skipLibCheck": true
 	},
 	"exclude": ["node_modules"],
-	// "include": ["src/**/*", "test/**/*", "__test__"],
+	"include": ["src/**/*", "test/**/*"],
 	"files": ["./src/@types/global.d.ts"]
 }
