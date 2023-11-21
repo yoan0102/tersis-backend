@@ -1,3 +1,1 @@
-import createSuperUser from './seedSuperUser'
-
-createSuperUser()
+import './seedSuperUser'
