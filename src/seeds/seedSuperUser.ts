@@ -8,6 +8,7 @@ const userDto = new UserDTORegister({
 	favorites: [],
 	role: 'Admin',
 })
+
 async function createSuperUser() {
 	await UserModel.create(userDto)
 }
