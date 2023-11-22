@@ -18,7 +18,7 @@ app.use(
 		credentials: true,
 	})
 )
-
+app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 
 app.use(compression())

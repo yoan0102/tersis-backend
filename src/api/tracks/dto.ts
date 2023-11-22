@@ -12,7 +12,7 @@ export class TrackDTOCreate {
 	public name: string
 	public album: Album
 	public artist: Artist
-	public artitCNames: string[]
+	public artitCNames?: string[]
 	public cover: string
 	public duration: Duration
 	public gender: Gender
@@ -44,7 +44,7 @@ export class TrackDTOCreate {
 		this.name = name
 		this.album = album
 		this.artist = artist
-		this.artitCNames = artitCNames
+		this.artitCNames = artitCNames || []
 		this.cover = cover || ''
 		this.duration = duration
 		this.gender = gender

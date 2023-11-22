@@ -27,7 +27,7 @@ export class TrackRoutes {
 				])
 			)
 
-			.post('/', [isAuthtenticate], this.controller.updateItems)
+			.put('/', [isAuthtenticate], this.controller.updateItems)
 		this.router.get('/', this.controller.getItems)
 		this.router.get('/:id', this.controller.getItem)
 		this.router.patch('/:id', [isAuthtenticate], this.controller.updateItems)

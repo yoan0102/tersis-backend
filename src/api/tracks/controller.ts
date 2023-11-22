@@ -37,7 +37,7 @@ export class TrackController {
 				nationality: req.body.nationality,
 				nickname: req.body.nickname,
 			},
-			artitCNames: req.body.artistCName.split(','),
+			artitCNames: req.body.artistCName,
 			duration: {
 				start: Number(req.body.durationStart),
 				end: Number(req.body.durationEnd),
