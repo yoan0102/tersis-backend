@@ -2,6 +2,11 @@ import config from './config'
 import connectDB from './config/database/mongo'
 
 import app from './app'
+import fs from 'node:fs'
+
+if (!fs.readdirSync('uploads')) {
+	fs.mkdirSync('uploads')
+}
 
 async function bootstrap() {
 	try {
