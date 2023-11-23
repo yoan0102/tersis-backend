@@ -4,10 +4,7 @@ import connectDB from './config/database/mongo'
 import app from './app'
 import fs from 'node:fs'
 
-if (!fs.readdirSync('uploads')) {
-	console.log('se creo el uploads')
-	fs.mkdirSync('uploads')
-}
+fs.readdirSync('uploads')
 
 async function bootstrap() {
 	try {
