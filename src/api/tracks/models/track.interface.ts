@@ -12,6 +12,7 @@ export interface Track {
 	user_id: ObjectId
 	artist: Artist
 	duration: Duration
+	isActive?: boolean
 }
 
 export interface Album {

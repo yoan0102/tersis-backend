@@ -6,18 +6,18 @@ import { TrackDTOCreate, TrackDTOUpdate } from './dto'
 
 export class TrackController {
 	async getItems(req: Request, res: Response) {
-		const tracks = await TrackModel.find({ published: true })
+		const tracks = await TrackModel.find({ published: true, isActive: true })
 		return responseJson(res, 200, tracks)
 	}
 
 	async getItemsAll(req: Request, res: Response) {
-		const tracks = await TrackModel.find({})
+		const tracks = await TrackModel.find({ isActive: true })
 		return responseJson(res, 200, tracks)
 	}
 
 	async getItem(req: Request, res: Response) {
 		const id = req.params.id
-		const track = await TrackModel.findById(id)
+		const track = await TrackModel.find({ id, published: true, isActive: true })
 		if (!track) {
 			const error: ErrorCustom = new Error('Track not Found')
 			error.status = 404
@@ -114,12 +114,15 @@ export class TrackController {
 	}
 
 	async deleteItems(req: Request, res: Response) {
-		const data = await TrackModel.findByIdAndDelete(req.params.id)
+		const data = await TrackModel.findByIdAndUpdate(req.params.id, {
+			isActive: false,
+		})
 		if (!data) {
 			const error: ErrorCustom = new Error('Track not found')
 			error.status = 404
 			throw error
 		}
+
 		return res.sendStatus(204).send('Track Deleted')
 	}
 
@@ -127,7 +130,7 @@ export class TrackController {
 		const id = req.params.id
 		const published = req.body.isPublished
 
-		const trackDb = await TrackModel.findById(id)
+		const trackDb = await TrackModel.find({ id, isActive: true })
 
 		if (!trackDb) {
 			const error: ErrorCustom = new Error('Track not found')

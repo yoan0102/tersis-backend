@@ -66,6 +66,10 @@ const TrackSchema = new mongoose.Schema<Track>(
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},
+		isActive: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{
 		versionKey: false,

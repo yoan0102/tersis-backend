@@ -151,7 +151,16 @@ export class UserController {
 			error.status = 404
 			throw error
 		}
-		const tracks = await TrackModel.find({})
+		const tracks = await TrackModel.find({ isActive: true })
+		if (tracks.length < 1) {
+			return res.json({
+				ok: true,
+				data: {
+					favorites: [],
+				},
+				error: false,
+			})
+		}
 
 		const favorites = userDb.favorites.map((x) =>
 			tracks.filter((item) => item.id == x)
