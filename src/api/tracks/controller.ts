@@ -6,6 +6,11 @@ import { TrackDTOCreate, TrackDTOUpdate } from './dto'
 
 export class TrackController {
 	async getItems(req: Request, res: Response) {
+		const tracks = await TrackModel.find({ published: true })
+		return responseJson(res, 200, tracks)
+	}
+
+	async getItemsAll(req: Request, res: Response) {
 		const tracks = await TrackModel.find({})
 		return responseJson(res, 200, tracks)
 	}
@@ -120,6 +125,7 @@ export class TrackController {
 
 	async publishItem(req: Request, res: Response) {
 		const id = req.params.id
+		const published = req.body.isPublished
 
 		const trackDb = await TrackModel.findById(id)
 
@@ -131,7 +137,7 @@ export class TrackController {
 
 		const track = await TrackModel.findByIdAndUpdate(
 			id,
-			{ published: true },
+			{ published },
 			{ new: true }
 		)
 		if (!track) {
